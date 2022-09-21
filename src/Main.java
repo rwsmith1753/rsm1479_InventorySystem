@@ -9,6 +9,10 @@ import Model.inHousePart;
 import Model.outsourcePart;
 import Model.Product;
 
+/**Ryan Smith's Inventory Management System -- A graphical user interface application for managing and maintaining an inventory of parts and products
+*
+*Initional default inventory items are load at program launch
+*/
 public class Main extends Application {
     @Override
     public void start(Stage mainStage) throws Exception {
