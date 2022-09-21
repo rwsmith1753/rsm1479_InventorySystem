@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyPartController">
+   <children>
+      <Text layoutX="60.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modify Part" wrappingWidth="116.55078125" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="Arial Bold" size="21.0" />
+         </font>
+      </Text>
+      <RadioButton fx:id="inHouse" layoutX="300.0" layoutY="83.0" mnemonicParsing="false" onAction="#setInHouse" selected="true" text="In-House" AnchorPane.leftAnchor="530.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="InOut" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="outsource" layoutX="430.0" layoutY="83.0" mnemonicParsing="false" onAction="#setOutsource" text="Outsource" toggleGroup="$InOut" AnchorPane.rightAnchor="294.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </RadioButton>
+      <TextField fx:id="id" layoutX="162.0" layoutY="172.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="165.0" />
+      <TextField fx:id="name" layoutX="162.0" layoutY="214.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="215.0" />
+      <TextField fx:id="stock" layoutX="162.0" layoutY="246.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="250.0" />
+      <TextField fx:id="price" layoutX="162.0" layoutY="279.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="285.0" />
+      <TextField fx:id="max" layoutX="162.0" layoutY="312.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="320.0" />
+      <TextField fx:id="source" layoutX="162.0" layoutY="345.0" AnchorPane.leftAnchor="362.0" AnchorPane.topAnchor="355.0" />
+      <TextField fx:id="min" layoutX="403.0" layoutY="313.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="320.0" />
+      <Text layoutX="60.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="170.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text fx:id="sourceSwitch" layoutX="257.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Machine ID" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="360.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="60.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="325.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="60.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price/Cost" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="290.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="60.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inv" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="255.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="60.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="220.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="353.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" AnchorPane.rightAnchor="415.0" AnchorPane.topAnchor="325.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Button layoutX="322.0" layoutY="432.0" mnemonicParsing="false" onAction="#savePart" text="Save" AnchorPane.rightAnchor="435.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="407.0" layoutY="432.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" AnchorPane.rightAnchor="335.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Button>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>

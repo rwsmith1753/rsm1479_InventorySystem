@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ModifyProductController">
+   <children>
+      <Text layoutX="63.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modify Product">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="75.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="75.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="75.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inv">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="75.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="235.0" layoutY="346.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="75.0" layoutY="346.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Text>
+      <TextField fx:id="id" editable="false" layoutX="130.0" layoutY="163.0" promptText="Auto ID -- Disabled" />
+      <TextField fx:id="stock" layoutX="130.0" layoutY="250.0" prefHeight="26.0" prefWidth="83.0" />
+      <TextField fx:id="price" layoutX="130.0" layoutY="287.0" prefHeight="26.0" prefWidth="83.0" />
+      <TextField fx:id="max" layoutX="130.0" layoutY="328.0" prefHeight="26.0" prefWidth="83.0" />
+      <TextField fx:id="min" layoutX="277.0" layoutY="328.0" prefHeight="26.0" prefWidth="65.0" />
+      <TextField fx:id="name" layoutX="130.0" layoutY="214.0" />
+      <TextField fx:id="searchPartField" layoutX="775.0" layoutY="27.0" onAction="#search" prefHeight="26.0" prefWidth="187.0" promptText="Search by Product ID or Name" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="27.0" />
+      <TableView fx:id="partTable" layoutX="524.0" layoutY="68.0" prefHeight="172.0" prefWidth="438.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="68.0">
+        <columns>
+          <TableColumn fx:id="partColId" editable="false" prefWidth="75.0" text="PartID" />
+            <TableColumn fx:id="partColName" editable="false" prefWidth="155.0" text="PartName" />
+          <TableColumn fx:id="partColInv" editable="false" prefWidth="115.0" text="Inventory Level" />
+            <TableColumn fx:id="partColPrice" editable="false" prefWidth="92.0" text="Price (ea)" />
+        </columns>
+      </TableView>
+      <Button fx:id="addPartBtn" layoutX="836.0" layoutY="251.0" mnemonicParsing="false" onAction="#addPart" text="Add" />
+      <Button fx:id="cancel" layoutX="890.0" layoutY="534.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button fx:id="saveProductBtn" layoutX="796.0" layoutY="534.0" mnemonicParsing="false" onAction="#save" text="Save" />
+      <Button fx:id="removePartBtn" layoutX="796.0" layoutY="487.0" mnemonicParsing="false" onAction="#removePart" text="Remove Associated Part" />
+      <TableView fx:id="associatedTable" layoutX="524.0" layoutY="308.0" prefHeight="172.0" prefWidth="438.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="300.0">
+         <columns>
+            <TableColumn fx:id="associatedColId" editable="false" prefWidth="75.0" text="PartID" />
+            <TableColumn fx:id="associatedColName" editable="false" prefWidth="155.0" text="PartName" />
+            <TableColumn fx:id="associatedColInv" editable="false" prefWidth="115.0" text="Inventory Level" />
+            <TableColumn fx:id="associatedColPrice" editable="false" prefWidth="92.0" text="Price (ea)" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>

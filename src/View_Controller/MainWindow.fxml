@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" scaleShape="false" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainWindowController">
+   <AnchorPane layoutX="75.0" layoutY="199.0" maxHeight="-Infinity" prefHeight="300.0" prefWidth="450.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 5; -fx-background-color: lightgrey;" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="200.0">
+      <TableView fx:id="partTable" layoutX="25.0" layoutY="48.0" prefHeight="175.0" prefWidth="350.0" style="-fx-border-color: black; -fx-border-radius: 3; -fx-background-color: white; -fx-background-radius: 3;" styleClass="table" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
+         <columns>
+            <TableColumn fx:id="partColId" editable="false" prefWidth="69.0" text="PartID" />
+            <TableColumn fx:id="partColName" prefWidth="140.0" text="Part Name" />
+            <TableColumn fx:id="partColInv" prefWidth="106.0" text="Inventory Level" />
+            <TableColumn fx:id="partColPrice" prefWidth="75.0" text="Price (ea)" />
+         </columns>
+      </TableView>
+      <Text layoutX="28.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Parts" wrappingWidth="42.40625" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Button alignment="CENTER" layoutX="176.0" layoutY="259.0" mnemonicParsing="false" onAction="#addPart" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Add" textAlignment="CENTER" />
+      <Button fx:id="deletePartBtn" alignment="CENTER" layoutX="317.0" layoutY="259.0" mnemonicParsing="false" onAction="#deletePart" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Delete" textAlignment="CENTER" />
+      <Button fx:id="modifyPartBtn" alignment="CENTER" layoutX="246.0" layoutY="259.0" mnemonicParsing="false" onAction="#modifyPart" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Modify" textAlignment="CENTER" />
+      <TextField fx:id="searchPartField" layoutX="257.0" layoutY="50.0" onAction="#searchPart" promptText="Search Part ID or Name" style="-fx-border-color: grey; -fx-border-width: 1; -fx-border-radius: 3;" AnchorPane.rightAnchor="25.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </TextField>
+   </AnchorPane>
+   <AnchorPane layoutX="544.0" layoutY="199.0" prefHeight="300.0" prefWidth="450.0" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 5; -fx-background-color: lightgrey;" AnchorPane.leftAnchor="504.0" AnchorPane.topAnchor="200.0">
+      <TableView fx:id="productTable" layoutX="38.0" layoutY="57.0" prefHeight="175.0" prefWidth="350.0" style="-fx-border-color: black; -fx-border-radius: 3; -fx-background-radius: 3;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
+         <columns>
+            <TableColumn fx:id="productColId" prefWidth="71.0" text="Product ID" />
+            <TableColumn fx:id="productColName" prefWidth="144.0" text="Product Name" />
+            <TableColumn fx:id="productColInv" prefWidth="100.0" text="Inventory Level" />
+            <TableColumn fx:id="productColPrice" prefWidth="75.0" text="Price (ea)" />
+         </columns>
+      </TableView>
+      <Text layoutX="28.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Products" wrappingWidth="70.40625" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Button fx:id="deleteProductBtn" alignment="CENTER" layoutX="318.0" layoutY="257.0" mnemonicParsing="false" onAction="#deleteProduct" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Delete" textAlignment="CENTER" />
+      <Button fx:id="addProductBtn" alignment="CENTER" layoutX="176.0" layoutY="257.0" mnemonicParsing="false" onAction="#addProduct" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Add" textAlignment="CENTER" />
+      <Button fx:id="modifyProductBtn" alignment="CENTER" layoutX="245.0" layoutY="257.0" mnemonicParsing="false" onAction="#modifyProduct" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="Modify" textAlignment="CENTER" />
+      <TextField fx:id="searchProductField" layoutX="263.0" layoutY="50.0" onAction="#searchProduct" promptText="Search Product ID or Name" style="-fx-border-color: grey; -fx-border-width: 1; -fx-border-radius: 3;" AnchorPane.rightAnchor="25.0">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </TextField>
+   </AnchorPane>
+   <Text layoutX="37.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inventory Management System" AnchorPane.leftAnchor="37.0" AnchorPane.topAnchor="66.9296875">
+      <font>
+         <Font name="System Bold" size="28.0" />
+      </font>
+   </Text>
+   <Button alignment="CENTER" layoutX="817.0" layoutY="537.0" mnemonicParsing="false" onAction="#exit" prefHeight="33.0" prefWidth="70.0" style="-fx-background-color: linear-gradient(white,lightgrey); -fx-border-radius: 5; -fx-border-width: 1; -fx-border-color: darkgrey; -fx-background-radius: 5; -fx-text-fill: black;" text="EXIT" textAlignment="CENTER" AnchorPane.leftAnchor="817.0" AnchorPane.topAnchor="537.0" />
+</AnchorPane>
