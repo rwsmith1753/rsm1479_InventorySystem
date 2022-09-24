@@ -1,6 +1,8 @@
 package View_Controller;
 
 import Model.*;
+import static Model.Inventory.getAllParts;
+import static Model.Inventory.getAllProducts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,10 +20,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static Model.Inventory.getAllParts;
-import static Model.Inventory.getAllProducts;
-
-
+/**Controller class for MainWindow view*/
 public class MainWindowController implements Initializable {
     public TextField searchPartField;
     public TextField searchProductField;
@@ -43,19 +42,38 @@ public class MainWindowController implements Initializable {
     private static int partIndex;
     private static int productIndex;
 
+    /**Retrieve part index
+     * $return int partIndex
+     * */
     public static int getPartIndex() {
         return partIndex;
     }
+    /**Retrieve product index
+     * @return int productIndex
+     * */
+
     public static int getProductIndex() {
         return productIndex;
     }
+
+    /**Retrieve selected part to modify
+     * @return Part partToModify
+     * */
     public static Part getPartToModify() {
         return partToModify;
     }
-    public static Product getProductToModify() {
+
+    /**Retrieve selected product to modify
+     * @return Product productToModify
+     * */
+    public Product getProductToModify() {
         return productToModify;
     }
 
+    /**Populate table data on view load
+     * @param url not used
+     * @param resourceBundle not used
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partTable.setItems(getAllParts());
@@ -71,43 +89,45 @@ public class MainWindowController implements Initializable {
         productColPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
     }
+    /**Handler for part search
+     * View search result in table
+     * @param event
+     * */
     public void searchPart(ActionEvent event) {
+
         String search = searchPartField.getText().toLowerCase(Locale.ROOT);
         ObservableList<Part> parts = searchPartName(search);
         if (parts.size() == 0) {
             try {
                 int id = Integer.parseInt(search);
                 Part part = searchPartId(id);
-
                 if (part != null) {
                     parts.add(part);
                 }
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 //ignore
             }
         }
         partTable.setItems(parts);
     }
+    /**Search for part by name
+     * @param name
+     * @return parts found
+     * */
     private ObservableList<Part> searchPartName(String name) {
-        ObservableList<Part> parts = FXCollections.observableArrayList();
-        ObservableList<Part> allParts = getAllParts();
-        for(Part part : allParts) {
-            if(part.getName().toLowerCase().contains(name)) {
-                parts.add(part);
-            }
-        }
-        return parts;
+        return Inventory.lookupPart(name);
     }
+    /**Search for part by ID
+     * @return part if match found
+     * @return null if no match found
+     * */
     private Part searchPartId(int id) {
-        ObservableList<Part> allParts = getAllParts();
-        for(Part part : allParts) {
-            if(part.getId() == id) {
-                return part;
-            }
-        }
-        return null;
+        return Inventory.lookupPart(id);
     }
+    /**Handler for product search
+     * View results in table
+     * @param event
+     * */
     public void searchProduct(ActionEvent event) {
         String search = searchProductField.getText().toLowerCase(Locale.ROOT);
         ObservableList<Product> products = searchProductName(search);
@@ -115,39 +135,34 @@ public class MainWindowController implements Initializable {
             try {
                 int id = Integer.parseInt(search);
                 Product product = searchProductId(id);
-
                 if (product != null) {
                     products.add(product);
                 }
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 //ignore
             }
         }
         productTable.setItems(products);
     }
+    /**Search for product by name
+     * @param name
+     * @return products if match found
+     * @return null if no match found
+     * */
     private ObservableList<Product> searchProductName(String name) {
-        ObservableList<Product> products = FXCollections.observableArrayList();
-        ObservableList<Product> allProducts = getAllProducts();
-
-        for(Product product : allProducts) {
-            if(product.getName().toLowerCase().contains(name)) {
-                products.add(product);
-            }
-        }
-
-        return products;
+        return Inventory.lookupProduct(name);
     }
+    /**Search for product by ID
+     * @return product if match found
+     * @return null if no match found
+     * */
     private Product searchProductId(int id) {
-        ObservableList<Product> allProducts = getAllProducts();
-
-        for(Product product : allProducts) {
-            if(product.getId() == id) {
-                return product;
-            }
-        }
-        return null;
+        return Inventory.lookupProduct(id);
     }
+    /**Open AddPart view
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void addPart(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("AddPart.fxml"));
@@ -157,6 +172,10 @@ public class MainWindowController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+    /**Open AddProduct view
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void addProduct(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("AddProduct.fxml"));
@@ -166,55 +185,92 @@ public class MainWindowController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+    /**Delete selected part
+     * @param event
+     * */
     @FXML
     public void deletePart(ActionEvent event) {
-        Part selected = partTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            return;
-        }
-        getAllParts().remove(selected);
-    }
-    @FXML
-    public void deleteProduct(ActionEvent event) {
-        Product selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            noneSelectedWarning();
-        }
-        if (selected.getAssociatedParts() == null) {
-            activeProductWarning();
-        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("WARNING");
         alert.setHeaderText("Confirm Delete");
         alert.setContentText("Are you sure?");
         Optional<ButtonType> confirm = alert.showAndWait();
         if (confirm.isPresent() && confirm.get() == ButtonType.OK) {
-            selected = productTable.getSelectionModel().getSelectedItem();
-            getAllProducts().remove(selected);
+            Part selected = partTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                selectedWarning();
+                return;
+            }
+            Inventory.deletePart(selected);
         }
     }
+    /**Delete selected product
+     * @param event
+     * */
+    @FXML
+    public void deleteProduct(ActionEvent event) {
+        Product selected = productTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            selectedWarning();
+            return;
+        }
+        if (selected.getAssociatedParts().size() > 0) {
+            activeProductWarning();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("WARNING");
+            alert.setHeaderText("Confirm Delete");
+            alert.setContentText("Are you sure?");
+            Optional<ButtonType> confirm = alert.showAndWait();
+            if (confirm.isPresent() && confirm.get() == ButtonType.OK) {
+                selected = productTable.getSelectionModel().getSelectedItem();
+                Inventory.deleteProduct(selected);
+            }
+        }
+    }
+    /**Open ModifyPart view to modify data for selected part
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void modifyPart(ActionEvent event) throws IOException {
         Part partToModify = partTable.getSelectionModel().getSelectedItem();
+        if (partToModify == null) {
+            selectedWarning();
+            return;
+        }
         partIndex = getAllParts().indexOf(partToModify);
         Parent root = FXMLLoader.load(getClass().getResource("ModifyPart.fxml"));
-        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root,1000,600);
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1000, 600);
         stage.setTitle("Modify Part");
         stage.setScene(scene);
         stage.show();
     }
+
+    /**Open ModifyProduct view to modify data for selected product
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void modifyProduct(ActionEvent event) throws IOException {
         Product productToModify = productTable.getSelectionModel().getSelectedItem();
+        if (productToModify == null) {
+            selectedWarning();
+            return;
+        }
         productIndex = getAllProducts().indexOf(productToModify);
         Parent root = FXMLLoader.load(getClass().getResource("ModifyProduct.fxml"));
-        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root,1000,600);
-        stage.setTitle("Modify Part");
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Modify Product");
         stage.setScene(scene);
         stage.show();
     }
+    /**Void action and return to MainWindow
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void exit(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
@@ -224,6 +280,7 @@ public class MainWindowController implements Initializable {
         stage.setScene(scene);
         stage.close();
     }
+    /**Warning! stock values violate Min/Max logic*/
     public static void stockWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("CHECK VALUES");
@@ -231,39 +288,28 @@ public class MainWindowController implements Initializable {
         alert.setContentText("Minimum stock must be less than or equal to Maximum stock\nStock must be within Min/Max limits");
         alert.showAndWait();
     }
-    public static void stringWarning() {
+    /**Warning! Incorrect data typ*/
+    public static void inputWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("INPUT TYPE");
-        alert.setHeaderText("Incorrect Input");
-        alert.setContentText("String type expected");
+        alert.setTitle("INCORRECT INPUT");
+        alert.setHeaderText("Incorrect data type");
+        alert.setContentText("Please enter correct data types\nName: String\nPrice: Number\nInv: Integer (must be between Min and Max)\nMax: Integer\nMin: Integer");
         alert.showAndWait();
     }
-    public static void intWarning() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("INPUT TYPE");
-        alert.setHeaderText("Incorrect Input");
-        alert.setContentText("Integer type expected");
-        alert.showAndWait();
-    }
-    public static void doubleWarning() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("INPUT TYPE");
-        alert.setHeaderText("Incorrect Input");
-        alert.setContentText("Number type expected");
-        alert.showAndWait();
-    }
-    public static void noneSelectedWarning() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("NONE SELECTED");
-        alert.setHeaderText("Nothing Selected");
-        alert.setContentText("Please select an item");
-        alert.showAndWait();
-    }
+    /**Warning! Products with associated parts cannot be deleted*/
     public static void activeProductWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("ACTIVE PRODUCT");
         alert.setHeaderText("Product may still be in use");
-        alert.setContentText("Please remove the associated parts before deleting this product");
+        alert.setContentText("Please remove all associated parts before deleting this product");
+        alert.showAndWait();
+    }
+    /**Warning! Searched item was not found*/
+    public static void selectedWarning() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("ITEM NOT SELECTED");
+        alert.setHeaderText("This action requires a selection");
+        alert.setContentText("Please select an item from the table to continue");
         alert.showAndWait();
     }
 }

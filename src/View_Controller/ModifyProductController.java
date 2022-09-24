@@ -1,6 +1,10 @@
 package View_Controller;
 
 import Model.*;
+import static Model.Inventory.getAllParts;
+import static Model.Inventory.getAllProducts;
+import static View_Controller.MainWindowController.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,15 +16,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static Model.Inventory.*;
-import static View_Controller.MainWindowController.*;
-
+/**Controller class for ModifyProduct view*/
 public class ModifyProductController implements Initializable {
     @FXML
     private TextField id;
@@ -57,9 +59,14 @@ public class ModifyProductController implements Initializable {
     @FXML
     private TableColumn<Part, Double> associatedColPrice;
     @FXML
-    private static Product product = getAllProducts().get(getProductIndex());
+    private Product product = getAllProducts().get(getProductIndex());
     @FXML
     private ObservableList<Part> partsToAdd = FXCollections.observableArrayList();
+
+    /**Populate table views on view load
+     * @param url not used
+     * @param resourceBundle not used
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partTable.setItems(getAllParts());
@@ -80,8 +87,13 @@ public class ModifyProductController implements Initializable {
         associatedColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         associatedColInv.setCellValueFactory(new PropertyValueFactory<>("stock"));
         associatedColPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-    }
 
+
+    }
+    /**Handler for part search
+     * View results in part table
+     * @param event
+     * */
     @FXML
     public void search(ActionEvent event) {
         String search = searchPartField.getText().toLowerCase(Locale.ROOT);
@@ -101,59 +113,102 @@ public class ModifyProductController implements Initializable {
         }
         partTable.setItems(parts);
     }
+    /**Search for part by name
+     * @param name
+     * @return parts if match found
+     * @return null if no match found
+     * */
     @FXML
     private ObservableList<Part> searchPartName(String name) {
-        ObservableList<Part> parts = FXCollections.observableArrayList();
-        ObservableList<Part> allParts = getAllParts();
-
-        for(Part part : allParts) {
-            if(part.getName().toLowerCase().contains(name)) {
-                parts.add(part);
-            }
-        }
-        return parts;
+        return Inventory.lookupPart(name);
     }
+    /**Search for part by ID
+     * @param id
+     * @return part if match found
+     * @return null if no match found
+     * */
     @FXML
     private Part searchPartId(int id) {
-        ObservableList<Part> allParts = getAllParts();
-        for (Part part : allParts) {
-            if (part.getId() == id) {
-                return part;
-            }
-        }
-        return null;
+        return Inventory.lookupPart(id);
     }
+    /**Associate selected part to active product
+     * Add selected part to associatedParts table
+     * @param event
+     * */
     public void addPart(ActionEvent event) {
         Part selected = partTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            selectedWarning();
+            return;
+        }
         product.addAssociatedPart(selected);
         associatedTable.setItems(product.getAssociatedParts());
     }
+
+    /**Remove selected associated part from product
+     * Remove selected part from associatedParts table
+     * @param event
+     * */
     public void removePart(ActionEvent event) {
-        Part selected = associatedTable.getSelectionModel().getSelectedItem();
-        product.getAssociatedParts().remove(selected);
-        associatedTable.setItems(product.getAssociatedParts());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("WARNING");
+        alert.setHeaderText("Confirm Remove");
+        alert.setContentText("Are you sure?");
+        Optional<ButtonType> confirm = alert.showAndWait();
+        if (confirm.isPresent() && confirm.get() == ButtonType.OK) {
+            Part selected = associatedTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                selectedWarning();
+                return;
+            }
+            product.getAssociatedParts().remove(selected);
+            associatedTable.setItems(product.getAssociatedParts());
+        } else {
+            //ignore
+        }
     }
+
+    /**Void action and return to MainWindow
+     * @param event
+     * @throws IOException
+     * */
     @FXML
     public void cancel(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        stage.setTitle("Inventory Management System");
         stage.setScene(scene);
         stage.show();
     }
+    /**Save new product to inventory and return to MainWindow
+     * @param event
+     * @throws IOException
+     * */
     public void save(ActionEvent event) throws IOException {
-        int index = getProductIndex();
-        int productId = Integer.valueOf(id.getText());
-        String productName = name.getText();
-        double productPrice = Double.valueOf(price.getText());
-        int productStock = Integer.valueOf(stock.getText());
-        int productMin = Integer.valueOf(min.getText());
-        int productMax = Integer.valueOf(max.getText());
-        if (productMin <= productMax && productMin <= productStock && productStock <= productMax) {
-            getAllProducts().set(index,product);
-            cancel(event);
-        } else {
-            stockWarning();
+        try {
+            int index = getProductIndex();
+            int productId = Integer.valueOf(id.getText());
+            String productName = name.getText();
+            double productPrice = Double.valueOf(price.getText());
+            int productStock = Integer.valueOf(stock.getText());
+            int productMin = Integer.valueOf(min.getText());
+            int productMax = Integer.valueOf(max.getText());
+            product.setId(productId);
+            product.setName(productName);
+            product.setPrice(productPrice);
+            product.setStock(productStock);
+            product.setMin(productMin);
+            product.setMax(productMax);
+            if (productMin <= productMax && productMin <= productStock && productStock <= productMax) {
+                Inventory.updateProduct(index,product);
+                cancel(event);
+            } else {
+                stockWarning();
+            }
+        }
+        catch (NumberFormatException e) {
+            inputWarning();
         }
     }
 }

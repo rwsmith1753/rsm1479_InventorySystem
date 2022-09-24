@@ -9,7 +9,21 @@ import Model.inHousePart;
 import Model.outsourcePart;
 import Model.Product;
 
+/**Ryan Smith's Inventory Management System -- A graphical user interface application for managing and maintaining an inventory of parts and products
+* @author Ryan Smith
+* rsm1479
+* ID: 010092517
+*
+*Initial default inventory items are load at program launch
+*
+*FUTURE ENHANCEMENT
+* auto-calculate product price based on associated part prices and a user-defined margin
+*/
 public class Main extends Application {
+    /**Opens MainWindow
+     * @param mainStage
+     * @throws Exception
+     * */
     @Override
     public void start(Stage mainStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("View_Controller/MainWindow.fxml"));
@@ -18,6 +32,9 @@ public class Main extends Application {
         mainStage.setScene(scene);
         mainStage.show();
     }
+    /**Create demo parts and launch application
+     * @param args
+     * */
     public static void main(String[] args) {
         ///prelaoded parts
         //In House Parts
