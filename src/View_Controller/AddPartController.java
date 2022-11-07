@@ -1,6 +1,5 @@
 package View_Controller;
 
-import Model.Part;
 import Model.inHousePart;
 import Model.outsourcePart;
 import Model.Inventory;

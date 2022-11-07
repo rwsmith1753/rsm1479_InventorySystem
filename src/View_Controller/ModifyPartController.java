@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import Model.Inventory;
-import Model.Part;
 import Model.inHousePart;
 import Model.outsourcePart;
 import javafx.event.ActionEvent;
